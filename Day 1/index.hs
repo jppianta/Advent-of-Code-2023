@@ -50,6 +50,6 @@ parseLine x = read (stripFirstNumber x ++ stripLastNumber x)
 main :: IO ()
 main = do
   contents <- readFile "input.txt"
-  let singlewords = words contents
-  let list = map parseLine singlewords
+  let singleLines = lines contents
+  let list = map parseLine singleLines
   print (sum list)
