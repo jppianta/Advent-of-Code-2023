@@ -2,6 +2,9 @@ data Color = Red | Green | Blue deriving (Show)
 
 type Cube = (Int, Color)
 
+-- Group of cubes for part two, representing (Red, Green Blue)
+type GroupOfCubes = (Int, Int, Int)
+
 -- A set of cubes is a tuple of the number of red, green and blue cubes
 type SetOfCubes = [Cube]
 
@@ -33,19 +36,19 @@ sumValidGames games = sum (map extractValidGameId games)
 powerOfGame :: Game -> Int
 powerOfGame (_, game) = multiplyGroupOfCubes (minNumberOfCubesOnGame game)
 
-multiplyGroupOfCubes :: (Int, Int, Int) -> Int
+multiplyGroupOfCubes :: GroupOfCubes -> Int
 multiplyGroupOfCubes (r, g, b) = r * g * b
 
-minNumberOfCubesOnGame :: [SetOfCubes] -> (Int, Int, Int)
+minNumberOfCubesOnGame :: [SetOfCubes] -> GroupOfCubes
 minNumberOfCubesOnGame = foldr (\c acc -> minGroupOfCubes acc (minNumberOfSetOfCubes c)) (0, 0, 0)
 
-minGroupOfCubes :: (Int, Int, Int) -> (Int, Int, Int) -> (Int, Int, Int)
+minGroupOfCubes :: GroupOfCubes -> GroupOfCubes -> GroupOfCubes
 minGroupOfCubes (r1, g1, b1) (r2, g2, b2) = (max r1 r2, max g1 g2, max b1 b2)
 
-minNumberOfSetOfCubes :: SetOfCubes -> (Int, Int, Int)
+minNumberOfSetOfCubes :: SetOfCubes -> GroupOfCubes
 minNumberOfSetOfCubes = foldr minNumberOfCube (0, 0, 0)
 
-minNumberOfCube :: Cube -> (Int, Int, Int) -> (Int, Int, Int)
+minNumberOfCube :: Cube -> GroupOfCubes -> GroupOfCubes
 minNumberOfCube (n, Red) (r, g, b) = (max n r, g, b)
 minNumberOfCube (n, Green) (r, g, b) = (r, max n g, b)
 minNumberOfCube (n, Blue) (r, g, b) = (r, g, max n b)
