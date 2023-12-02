@@ -63,6 +63,7 @@ parseGame s = (parseGameId s, parseGameInfo s)
 parseGameId :: String -> Int
 parseGameId s = extractGameId (head (splitOn ':' s))
 
+-- Since the input here will be of type "Game n", we drop "Game " and parse the n
 extractGameId :: String -> Int
 extractGameId s = read (drop 5 s)
 
@@ -75,9 +76,10 @@ parseGameSets s = map parseSetOfCubes (splitOn ';' s)
 parseSetOfCubes :: String -> SetOfCubes
 parseSetOfCubes s = map extractNumberOfCubes (splitOn ',' s)
 
+-- The input will be of type "n Color", so we split on ' ', parse the n and parse the cube color with the Color
 extractNumberOfCubes :: String -> Cube
 extractNumberOfCubes s = (read (head x), parseCubeColor (x !! 1)) where
-                            x = splitOn ' ' (trimStart s)
+                            x = words (trimStart s)
 
 parseCubeColor :: String -> Color
 parseCubeColor s

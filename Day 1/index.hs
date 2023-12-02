@@ -9,6 +9,7 @@ stripFirstNumber (x:xs)
   | isWrittenDigit (x:xs) = writtenDigitsToDigits (stripWrittenDigit (x:xs))
   | otherwise = stripFirstNumber xs
 
+-- Basically same as stripFirstNumber but going backwards through the string
 stripLastNumber :: String -> String
 stripLastNumber x
   | isDigit (last x) = [last x]
