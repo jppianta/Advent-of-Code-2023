@@ -1,3 +1,5 @@
+module Day2 where
+
 data Color = Red | Green | Blue deriving (Show)
 
 type Cube = (Int, Color)
@@ -101,9 +103,16 @@ trimStart (x:xs)
   | otherwise = x:xs
 --
 
-main :: IO ()
-main = do
-  contents <- readFile "input.txt"
+executeDay2Part1 :: IO ()
+executeDay2Part1 = do
+  contents <- readFile "inputFiles/Day2.txt"
+  let singleLines = lines contents
+  let games = map parseGame singleLines
+  print (sumValidGames games)
+
+executeDay2Part2 :: IO ()
+executeDay2Part2 = do
+  contents <- readFile "inputFiles/Day2.txt"
   let singleLines = lines contents
   let games = map parseGame singleLines
   print (sumPowerOfGames games)
