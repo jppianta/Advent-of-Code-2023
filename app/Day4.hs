@@ -13,8 +13,8 @@ type ElfNumbers = Set Int
 sumOfPoints :: [(WinningNumbers, ElfNumbers)] -> Int
 sumOfPoints cards = sum (map (uncurry pointsOfElfNumbers) cards)
 
-pointsOfElfNumbers :: ElfNumbers -> WinningNumbers -> Int
-pointsOfElfNumbers elfNumbers winningNumbers
+pointsOfElfNumbers :: WinningNumbers -> ElfNumbers -> Int
+pointsOfElfNumbers winningNumbers elfNumbers
   | n > 0 = 2 ^ (n - 1)
   | otherwise = 0
   where n = numberOfIntersections winningNumbers elfNumbers
