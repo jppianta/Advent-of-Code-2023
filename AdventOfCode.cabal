@@ -42,7 +42,8 @@ maintainer:         joaopedro.pianta@gmail.com
 build-type:         Simple
 
 -- Extra doc files to be distributed with the package, such as a CHANGELOG or a README.
-extra-doc-files:    CHANGELOG.md
+extra-doc-files:    CHANGELOG.md,
+                    README.md
 
 -- Extra source files to be distributed with the package, such as examples, or a tutorial module.
 -- extra-source-files:
@@ -50,15 +51,13 @@ extra-doc-files:    CHANGELOG.md
 common warnings
     ghc-options: -Wall
 
-executable AdventOfCode
+library
     -- Import common warning flags.
     import:           warnings
 
-    -- .hs or .lhs file containing the Main module.
-    main-is:          Main.hs
+    exposed-modules:  Day1, Day2, Day3, Day4
 
-    -- Modules included in this executable, other than Main.
-    other-modules:    Utils, Day1, Day2, Day3, Day4
+    other-modules:    Utils
 
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:

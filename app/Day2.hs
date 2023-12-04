@@ -6,13 +6,13 @@ data Color = Red | Green | Blue deriving (Show)
 
 type Cube = (Int, Color)
 
--- Group of cubes for part two, representing (Red, Green Blue)
+-- | Group of cubes for part two, representing (Red, Green Blue)
 type GroupOfCubes = (Int, Int, Int)
 
--- A set of cubes is a tuple of the number of red, green and blue cubes
+-- | A set of cubes is a tuple of the number of red, green and blue cubes
 type SetOfCubes = [Cube]
 
--- A game is a tuple of the id of the game a a list of set of cubes
+-- | A game is a tuple of the id of the game a a list of set of cubes
 type Game = (Int, [SetOfCubes])
 
 -- Part 1
