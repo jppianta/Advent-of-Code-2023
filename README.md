@@ -1,5 +1,5 @@
 # Advent of Code 2023
-Each day consists of
- - `problem.md` describing the problems
- - `index.hs` with the solution
- - `input.txt` with the input file
+
+`app` folder contains all solutions for each day
+`inputFiles` folder contains the input files (obviously)
+`problems` folder contains the definition of the problem for each day
