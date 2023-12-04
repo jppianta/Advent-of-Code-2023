@@ -34,7 +34,7 @@ addNextCopiesOfCard :: CardBoard -> (WinningCard, ElfNumbers) -> CardBoard
 addNextCopiesOfCard b ((cards, count), elfNumbers) = addNextCopies b (numberOfIntersections cards elfNumbers) count
 
 runBoard :: CardBoard -> CardBoard
-runBoard ((winningCard, elfNumbers):xs) = (winningCard, elfNumbers) : runBoard (addNextCopiesOfCard xs (winningCard, elfNumbers))
+runBoard (card:xs) = card : runBoard (addNextCopiesOfCard xs card)
 runBoard [] = []
 
 sumBoard :: CardBoard -> Int
