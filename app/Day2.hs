@@ -1,5 +1,7 @@
 module Day2 where
 
+import Utils (splitOn, trimStart)
+
 data Color = Red | Green | Blue deriving (Show)
 
 type Cube = (Int, Color)
@@ -26,8 +28,8 @@ isValidCube (n, Green) = n <= 13
 isValidCube (n, Blue) = n <= 14
 
 extractValidGameId :: Game -> Int
-extractValidGameId (id, game)
-  | isValidGame game = id
+extractValidGameId (gameId, game)
+  | isValidGame game = gameId
   | otherwise = 0
 
 sumValidGames :: [Game] -> Int
@@ -88,19 +90,7 @@ parseCubeColor s
   | s == "red" = Red
   | s == "blue" = Blue
   | s == "green" = Green
---
-
--- Helpers
-splitOn :: Char -> String -> [String]
-splitOn c s =  case dropWhile (==c) s of
-                    "" -> []
-                    s' -> w : splitOn c s''
-                          where (w, s'') = break (==c) s'
-
-trimStart :: String -> String
-trimStart (x:xs)
-  | x == ' ' = trimStart xs
-  | otherwise = x:xs
+  | otherwise = error "Invalid color"
 --
 
 executeDay2Part1 :: IO ()
