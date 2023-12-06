@@ -6,9 +6,9 @@ import Data.List
 -- | Checks for the first occurence of a number, either a digit or a written digit
 stripFirstNumber :: String -> String
 stripFirstNumber "" = ""
-stripFirstNumber (x:xs)
+stripFirstNumber (x : xs)
   | isDigit x = [x]
-  | isWrittenDigit (x:xs) = writtenDigitsToDigits (stripWrittenDigit (x:xs))
+  | isWrittenDigit (x : xs) = writtenDigitsToDigits (stripWrittenDigit (x : xs))
   | otherwise = stripFirstNumber xs
 
 -- | Checks for the last occurence of a number, either a digit or a written digit

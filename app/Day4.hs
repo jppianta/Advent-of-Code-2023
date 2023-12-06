@@ -1,12 +1,14 @@
 module Day4 where
 
-import Utils (splitOn)
 import Data.Set hiding (drop, map)
+import Utils (splitOn)
 
 type CardBoard = [(WinningCard, ElfNumbers)]
+
 type WinningCard = (WinningNumbers, Int)
 
 type WinningNumbers = Set Int
+
 type ElfNumbers = Set Int
 
 -- Part 1
@@ -17,32 +19,35 @@ pointsOfElfNumbers :: WinningNumbers -> ElfNumbers -> Int
 pointsOfElfNumbers winningNumbers elfNumbers
   | n > 0 = 2 ^ (n - 1)
   | otherwise = 0
-  where n = numberOfIntersections winningNumbers elfNumbers
+  where
+    n = numberOfIntersections winningNumbers elfNumbers
 
 numberOfIntersections :: WinningNumbers -> ElfNumbers -> Int
 numberOfIntersections winningNumbers elfNumbers = size (intersection winningNumbers elfNumbers)
+
 ---
 
 -- Part 2
 addNextCopies :: CardBoard -> Int -> Int -> CardBoard
 addNextCopies [] _ _ = []
 addNextCopies b 0 _ = b
-addNextCopies (((card, count), e):xs) c n = ((card, count + n), e) : addNextCopies xs (c - 1) n
+addNextCopies (((card, count), e) : xs) c n = ((card, count + n), e) : addNextCopies xs (c - 1) n
 
 addNextCopiesOfCard :: CardBoard -> (WinningCard, ElfNumbers) -> CardBoard
 addNextCopiesOfCard b ((cards, count), elfNumbers) = addNextCopies b (numberOfIntersections cards elfNumbers) count
 
 runBoard :: CardBoard -> CardBoard
-runBoard (card:xs) = card : runBoard (addNextCopiesOfCard xs card)
+runBoard (card : xs) = card : runBoard (addNextCopiesOfCard xs card)
 runBoard [] = []
 
 sumBoard :: CardBoard -> Int
 sumBoard b = sum (map (snd . fst) (runBoard b))
+
 ---
 
 -- Parsers
 parseCards :: [[Int]] -> (WinningNumbers, ElfNumbers)
-parseCards (x:y:_) = (fromList x, fromList y)
+parseCards (x : y : _) = (fromList x, fromList y)
 parseCards [x] = (fromList x, empty)
 parseCards [] = (empty, empty)
 
@@ -50,7 +55,7 @@ parseLine :: String -> (WinningNumbers, ElfNumbers)
 parseLine s = parseCards (map parseNumbers (splitOn '|' (drop 9 s)))
 
 parseCardsPart2 :: [[Int]] -> (WinningCard, ElfNumbers)
-parseCardsPart2 (x:y:_) = ((fromList x, 1), fromList y)
+parseCardsPart2 (x : y : _) = ((fromList x, 1), fromList y)
 parseCardsPart2 [x] = ((fromList x, 1), empty)
 parseCardsPart2 [] = ((empty, 1), empty)
 
@@ -62,6 +67,7 @@ createCardBoard = map parseLinePart2
 
 parseNumbers :: String -> [Int]
 parseNumbers s = map read (words s)
+
 ---
 
 executeDay4Part1 :: IO ()

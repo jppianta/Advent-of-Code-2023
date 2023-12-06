@@ -1,33 +1,36 @@
 module Day6 where
 
 type Time = Int
+
 type Distance = Int
+
 type Race = (Time, Distance)
 
 multiplyWaysToWin :: [Race] -> Int
-multiplyWaysToWin = foldl (*) 1 . map waysToWin
+multiplyWaysToWin = product . map waysToWin
 
 waysToWin :: Race -> Int
-waysToWin (time, distance) = length (filter (>distance) (map (distanceOnHold time) [0..time]))
+waysToWin (time, distance) = length (filter (> distance) (map (distanceOnHold time) [0 .. time]))
 
 distanceOnHold :: Int -> Int -> Int
 distanceOnHold time holdingTime = holdingTime * (time - holdingTime)
 
 -- Parsers
-parseRaces :: [String] -> [Race];
-parseRaces [t,d] = zip (map read (drop 1 (words t))) (map read (drop 1 (words d)))
+parseRaces :: [String] -> [Race]
+parseRaces [t, d] = zip (map read (drop 1 (words t))) (map read (drop 1 (words d)))
 parseRaces [] = []
 parseRaces [_] = []
 parseRaces _ = []
 
 parseRace :: [String] -> Race
-parseRace [t,d] = (parseNumber (drop 1 (words t)), parseNumber (drop 1 (words d)))
-parseRace [] = (0,0)
-parseRace [_] = (0,0)
-parseRace _ = (0,0)
+parseRace [t, d] = (parseNumber (drop 1 (words t)), parseNumber (drop 1 (words d)))
+parseRace [] = (0, 0)
+parseRace [_] = (0, 0)
+parseRace _ = (0, 0)
 
 parseNumber :: [String] -> Int
-parseNumber = read . foldl (++) ""
+parseNumber = read . concat
+
 ---
 
 executeDay6Part1 :: IO ()

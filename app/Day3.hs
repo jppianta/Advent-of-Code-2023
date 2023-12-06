@@ -1,9 +1,9 @@
 module Day3 where
 
-import Prelude hiding (lookup)
 import Data.Char (isDigit)
+import Data.HashMap hiding (filter, map, null)
 import Data.List (sort)
-import Data.HashMap hiding (map, filter, null)
+import Prelude hiding (lookup)
 
 type Coord = (Int, Int)
 
@@ -23,32 +23,32 @@ parseGears :: EngineSchematic -> Map (Int, Int) [Int]
 parseGears engine = parseGearValues (parseGearPairs (extractNumbers engine) engine)
 
 sumGearRatios :: Map (Int, Int) [Int] -> Int
-sumGearRatios m = fold (\vals acc -> acc + gearRatio vals) 0 m 
+sumGearRatios = fold (\vals acc -> acc + gearRatio vals) 0
 
 gearRatio :: [Int] -> Int
 gearRatio [] = 0
-gearRatio (_:[]) = 0
-gearRatio (x:y:_) = x * y
+gearRatio [_] = 0
+gearRatio (x : y : _) = x * y
 
 parseGearValues :: [GearPair] -> Map (Int, Int) [Int]
 parseGearValues = foldr parseGearValue empty
 
 parseGearValue :: GearPair -> Map (Int, Int) [Int] -> Map (Int, Int) [Int]
 parseGearValue (_, []) m = m
-parseGearValue (v, ((_, coord):xs)) m = insert coord (v : (emptyIfNothing (lookup coord m))) (parseGearValue (v, xs) m)
+parseGearValue (v, (_, coord) : xs) m = insert coord (v : emptyIfNothing (lookup coord m)) (parseGearValue (v, xs) m)
 
 emptyIfNothing :: Maybe [a] -> [a]
 emptyIfNothing Nothing = []
 emptyIfNothing (Just l) = l
 
 parseGearPairs :: [PartNumber] -> EngineSchematic -> [GearPair]
-parseGearPairs values eng = filter (\ (_, l) -> not (null l)) (map (`createGearPair` eng) values)
+parseGearPairs values eng = filter (\(_, l) -> not (null l)) (map (`createGearPair` eng) values)
 
 createGearPair :: PartNumber -> EngineSchematic -> GearPair
-createGearPair (n, coord) eng = (parsePartNumber (n, coord) eng, concat (map (`findAdjencentGears` eng) coord))
+createGearPair (n, coord) eng = (parsePartNumber (n, coord) eng, concatMap (`findAdjencentGears` eng) coord)
 
 findAdjencentGears :: Coord -> EngineSchematic -> [ValueCoord]
-findAdjencentGears c e =  filter (\ (v, _) -> v == '*') (adjacentValueCoords c e)
+findAdjencentGears c e = filter (\(v, _) -> v == '*') (adjacentValueCoords c e)
 
 adjacentValueCoords :: Coord -> EngineSchematic -> [ValueCoord]
 adjacentValueCoords c e = map (`valueCoordFromCoord` e) (adjacentCoords c)
@@ -80,7 +80,7 @@ extractNumbers eng = extractNumber (sort (keys eng)) eng
 
 extractNumber :: [Coord] -> EngineSchematic -> [PartNumber]
 extractNumber [] _ = []
-extractNumber (coord:xs) eng
+extractNumber (coord : xs) eng
   | isDigit look = (number, snd pair) : extractNumber xs (removeAllCoords (snd pair) eng)
   | otherwise = extractNumber xs eng
   where
@@ -96,7 +96,8 @@ extractValueNumber coord eng
   | isPartOfNumber coord eng = joinPartNumbers ([look], [coord]) (extractValueNumber (addCoords coord (0, 1)) eng)
   | isDigit look = ([look], [coord])
   | otherwise = ("", [])
-  where look = valueFromCoord coord eng
+  where
+    look = valueFromCoord coord eng
 
 joinPartNumbers :: (String, [Coord]) -> (String, [Coord]) -> (String, [Coord])
 joinPartNumbers (s1, c1) (s2, c2) = (s1 ++ s2, c1 ++ c2)
@@ -136,6 +137,7 @@ extractValueFromValueCoord Nothing = '.'
 extractValueFromValueCoord (Just v) = v
 
 ---
+
 -- Parsers
 getCoordsFromLine :: Int -> String -> [Coord]
 getCoordsFromLine idx line = map (\x -> (idx, x)) (indexesFromZero line)
@@ -144,10 +146,11 @@ parseLine :: Int -> String -> [(Coord, Char)]
 parseLine idx line = zip (getCoordsFromLine idx line) line
 
 initEngine :: [(Coord, Char)] -> EngineSchematic
-initEngine = foldr (\pair -> insert (fst pair) (snd pair)) empty
+initEngine = foldr (uncurry insert) empty
 
 parseFile :: [String] -> EngineSchematic
 parseFile file = initEngine (concat (zipWith parseLine (indexesFromZero file) file))
+
 ---
 
 -- Helpers
@@ -157,6 +160,7 @@ indexes n (_ : xs) = n : indexes (n + 1) xs
 
 indexesFromZero :: [a] -> [Int]
 indexesFromZero = indexes 0
+
 ---
 
 executeDay3Part1 :: IO ()

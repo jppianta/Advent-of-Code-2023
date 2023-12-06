@@ -34,6 +34,7 @@ extractValidGameId (gameId, game)
 
 sumValidGames :: [Game] -> Int
 sumValidGames games = sum (map extractValidGameId games)
+
 --
 
 -- Part 2
@@ -82,8 +83,9 @@ parseSetOfCubes s = map extractNumberOfCubes (splitOn ',' s)
 
 -- The input will be of type "n Color", so we split on ' ', parse the n and parse the cube color with the Color
 extractNumberOfCubes :: String -> Cube
-extractNumberOfCubes s = (read (head x), parseCubeColor (x !! 1)) where
-                            x = words (trimStart s)
+extractNumberOfCubes s = (read (head x), parseCubeColor (x !! 1))
+  where
+    x = words (trimStart s)
 
 parseCubeColor :: String -> Color
 parseCubeColor s
@@ -91,6 +93,7 @@ parseCubeColor s
   | s == "blue" = Blue
   | s == "green" = Green
   | otherwise = error "Invalid color"
+
 --
 
 executeDay2Part1 :: IO ()
